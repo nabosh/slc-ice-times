@@ -1,0 +1,69 @@
+name: Scrape & Deploy
+
+on:
+  schedule:
+    # Run twice daily: 8am and 6pm Mountain Time (UTC-7)
+    - cron: '0 15 * * *'   # 8am MT
+    - cron: '0 1 * * *'    # 6pm MT
+  workflow_dispatch:        # Manual trigger
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r scraper/requirements.txt
+
+      - name: Run scraper
+        run: python scraper/scrape.py
+
+      - name: Check for changes
+        id: check
+        run: |
+          git diff --quiet data/schedules.json && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit updated data
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "SLC Ice Times Bot"
+          git config user.email "bot@slc-ice-times.github.io"
+          git add data/schedules.json
+          git commit -m "Update schedule data $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push
+
+  deploy:
+    needs: scrape
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main  # Get latest (including any scraper commit)
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLC Ice Times — Drop-In Hockey, Stick & Puck, Public Skate</title>
+<meta name="description" content="All Salt Lake County ice rink open sessions in one place. Drop-in hockey, stick & puck, and public skate times for Acord, County Ice Center, SLC Sports Complex, and Cottonwood Heights.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1120;
+    --bg-card: #131c31;
+    --bg-card-hover: #1a2540;
+    --border: #1e2d4a;
+    --text: #e2e8f0;
+    --text-muted: #7a8ba8;
+    --text-dim: #4a5a78;
+    --accent-sp: #38bdf8;
+    --accent-sp-bg: rgba(56, 189, 248, 0.1);
+    --accent-sp-border: rgba(56, 189, 248, 0.25);
+    --accent-di: #f97316;
+    --accent-di-bg: rgba(249, 115, 22, 0.1);
+    --accent-di-border: rgba(249, 115, 22, 0.25);
+    --accent-ps: #a78bfa;
+    --accent-ps-bg: rgba(167, 139, 250, 0.1);
+    --accent-ps-border: rgba(167, 139, 250, 0.25);
+    --accent-today: #22d3ee;
+    --radius: 10px;
+    --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(56, 189, 248, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(167, 139, 250, 0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---- Header ---- */
+  header {
+    padding: 40px 0 24px;
+    text-align: center;
+  }
+
+  header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+
+  header h1 .ice { color: var(--accent-sp); }
+
+  header p.tagline {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .updated {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ---- Filters ---- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding: 16px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+
+  .filter-btn {
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+
+  .filter-btn.active {
+    background: var(--accent-sp-bg);
+    border-color: var(--accent-sp-border);
+    color: var(--accent-sp);
+  }
+
+  .filter-btn.active[data-type="drop_in"] {
+    background: var(--accent-di-bg);
+    border-color: var(--accent-di-border);
+    color: var(--accent-di);
+  }
+
+  .filter-btn.active[data-type="public_skate"] {
+    background: var(--accent-ps-bg);
+    border-color: var(--accent-ps-border);
+    color: var(--accent-ps);
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filter-divider {
+    width: 1px;
+    background: var(--border);
+    margin: 0 4px;
+    align-self: stretch;
+  }
+
+  /* ---- Day Groups ---- */
+  .day-group {
+    margin-bottom: 28px;
+  }
+
+  .day-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .day-header .day-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .day-header .day-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--mono);
+  }
+
+  .day-header.today .day-name {
+    color: var(--accent-today);
+  }
+
+  .day-header.today::after {
+    content: 'TODAY';
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    color: var(--accent-today);
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: auto;
+  }
+
+  /* ---- Session Cards ---- */
+  .sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .session {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: background 0.15s ease;
+  }
+
+  .session:hover {
+    background: var(--bg-card-hover);
+  }
+
+  .session-time {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    min-width: 110px;
+  }
+
+  .session-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .session-rink {
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .session-type-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .session-type-badge.stick_and_puck {
+    background: var(--accent-sp-bg);
+    border: 1px solid var(--accent-sp-border);
+    color: var(--accent-sp);
+  }
+
+  .session-type-badge.drop_in {
+    background: var(--accent-di-bg);
+    border: 1px solid var(--accent-di-border);
+    color: var(--accent-di);
+  }
+
+  .session-type-badge.public_skate {
+    background: var(--accent-ps-bg);
+    border: 1px solid var(--accent-ps-border);
+    color: var(--accent-ps);
+  }
+
+  /* ---- Time Range Selector ---- */
+  .range-selector {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+
+  .range-btn {
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .range-btn:first-child { border-radius: 8px 0 0 8px; }
+  .range-btn:last-child { border-radius: 0 8px 8px 0; }
+
+  .range-btn:hover {
+    color: var(--text);
+    background: var(--bg-card);
+  }
+
+  .range-btn.active {
+    background: var(--bg-card);
+    color: var(--text);
+    border-color: var(--accent-sp-border);
+  }
+
+  /* ---- Empty State ---- */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+
+  .empty-state .icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+  }
+
+  .empty-state p {
+    font-size: 0.9rem;
+  }
+
+  /* ---- Footer ---- */
+  footer {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  footer a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  footer a:hover { text-decoration: underline; }
+
+  /* ---- Loading ---- */
+  .loading {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-muted);
+  }
+
+  .loading .spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent-sp);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 600px) {
+    header { padding: 24px 0 16px; }
+    header h1 { font-size: 1.35rem; }
+    .filters { gap: 6px; padding: 12px 0 16px; }
+    .filter-btn { font-size: 0.75rem; padding: 5px 10px; }
+    .filter-divider { display: none; }
+    .session { grid-template-columns: 1fr; gap: 4px; padding: 10px 12px; }
+    .session-time { min-width: unset; }
+    .session-type-badge { align-self: flex-start; }
+    .day-header .day-name { font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>SLC <span class="ice">Ice</span> Times</h1>
+    <p class="tagline">Drop-in hockey, stick & puck, and public skate — all rinks, one page.</p>
+    <div class="updated" id="updated"></div>
+  </header>
+
+  <div class="filters">
+    <div class="filter-group" id="type-filters">
+      <button class="filter-btn active" data-type="all">All Types</button>
+      <button class="filter-btn" data-type="stick_and_puck">Stick & Puck</button>
+      <button class="filter-btn" data-type="drop_in">Drop-In Hockey</button>
+      <button class="filter-btn" data-type="public_skate">Public Skate</button>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-group" id="rink-filters">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <div class="range-selector" id="range-selector">
+    <button class="range-btn active" data-range="7">7 Days</button>
+    <button class="range-btn" data-range="14">14 Days</button>
+    <button class="range-btn" data-range="30">30 Days</button>
+    <button class="range-btn" data-range="0">All</button>
+  </div>
+
+  <main id="main">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading schedules...</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      Schedules sourced from
+      <a href="https://www.quickscores.com/slchockey" target="_blank" rel="noopener">QuickScores</a> &
+      <a href="https://www.chparksandrecut.gov/ice-arena" target="_blank" rel="noopener">CH Parks & Rec</a>.
+      All times subject to change — confirm with the rink.
+    </p>
+    <p style="margin-top: 6px;">
+      <a href="https://github.com/YOUR_USERNAME/slc-ice-times" target="_blank" rel="noopener">Source on GitHub</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // State
+  let scheduleData = null;
+  let activeType = 'all';
+  let activeRinks = new Set();
+  let daysRange = 7;
+
+  // Helpers
+  const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const TYPE_LABELS = {
+    stick_and_puck: 'Stick & Puck',
+    drop_in: 'Drop-In Hockey',
+    public_skate: 'Public Skate'
+  };
+
+  function formatTime(t) {
+    const [h, m] = t.split(':').map(Number);
+    const ampm = h >= 12 ? 'pm' : 'am';
+    const hour = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    return `${hour}:${m.toString().padStart(2, '0')}${ampm}`;
+  }
+
+  function toDateStr(d) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  function isSameDay(dateStr, d) {
+    return dateStr === toDateStr(d);
+  }
+
+  function parseLocalDate(dateStr) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  // Render
+  function render() {
+    const main = document.getElementById('main');
+    if (!scheduleData) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = toDateStr(today);
+
+    // Flatten all sessions with rink info
+    let sessions = [];
+    for (const rink of scheduleData.rinks) {
+      if (activeRinks.size > 0 && !activeRinks.has(rink.id)) continue;
+      for (const s of rink.sessions) {
+        if (activeType !== 'all' && s.type !== activeType) continue;
+        const sDate = parseLocalDate(s.date);
+        if (sDate < today) continue; // Skip past sessions
+        if (daysRange > 0) {
+          const maxDate = new Date(today);
+          maxDate.setDate(maxDate.getDate() + daysRange);
+          if (sDate >= maxDate) continue;
+        }
+        sessions.push({ ...s, rinkName: rink.name, rinkId: rink.id });
+      }
+    }
+
+    // Sort by date, then start time
+    sessions.sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
+
+    if (sessions.length === 0) {
+      main.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🏒</div>
+          <p>No sessions found for the selected filters.</p>
+        </div>`;
+      return;
+    }
+
+    // Group by date
+    const groups = [];
+    let currentDate = null;
+    let currentGroup = null;
+    for (const s of sessions) {
+      if (s.date !== currentDate) {
+        currentDate = s.date;
+        currentGroup = { date: s.date, sessions: [] };
+        groups.push(currentGroup);
+      }
+      currentGroup.sessions.push(s);
+    }
+
+    // Render groups
+    let html = '';
+    for (const group of groups) {
+      const d = parseLocalDate(group.date);
+      const dayName = DAY_NAMES[d.getDay()];
+      const dateStr = `${MONTH_NAMES[d.getMonth()]} ${d.getDate()}`;
+      const isToday = group.date === todayStr;
+
+      html += `<div class="day-group">`;
+      html += `<div class="day-header${isToday ? ' today' : ''}">`;
+      html += `<span class="day-name">${dayName}</span>`;
+      html += `<span class="day-date">${dateStr}</span>`;
+      html += `</div>`;
+      html += `<div class="sessions-list">`;
+
+      for (const s of group.sessions) {
+        const timeStr = `${formatTime(s.start)} – ${formatTime(s.end)}`;
+        html += `
+          <div class="session">
+            <span class="session-time">${timeStr}</span>
+            <div class="session-info">
+              <span class="session-rink">${s.rinkName}</span>
+            </div>
+            <span class="session-type-badge ${s.type}">${TYPE_LABELS[s.type] || s.type}</span>
+          </div>`;
+      }
+
+      html += `</div></div>`;
+    }
+
+    main.innerHTML = html;
+  }
+
+  // Init filters
+  function initFilters() {
+    // Type filters
+    document.getElementById('type-filters').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('#type-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeType = btn.dataset.type;
+      render();
+    });
+
+    // Rink filters
+    const rinkFilters = document.getElementById('rink-filters');
+    const allBtn = document.createElement('button');
+    allBtn.className = 'filter-btn active';
+    allBtn.dataset.rink = 'all';
+    allBtn.textContent = 'All Rinks';
+    rinkFilters.appendChild(allBtn);
+
+    for (const rink of scheduleData.rinks) {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.dataset.rink = rink.id;
+      // Shorter names for mobile
+      const shortNames = {
+        'Acord Ice Center': 'Acord',
+        'County Ice Center': 'County',
+        'SLC Sports Complex': 'Sports Complex',
+        'Cottonwood Heights Rec Center': 'Cottonwood'
+      };
+      btn.textContent = shortNames[rink.name] || rink.name;
+      rinkFilters.appendChild(btn);
+    }
+
+    rinkFilters.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+
+      if (btn.dataset.rink === 'all') {
+        activeRinks.clear();
+        rinkFilters.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      } else {
+        rinkFilters.querySelector('[data-rink="all"]').classList.remove('active');
+        btn.classList.toggle('active');
+        if (btn.classList.contains('active')) {
+          activeRinks.add(btn.dataset.rink);
+        } else {
+          activeRinks.delete(btn.dataset.rink);
+        }
+        // If none selected, revert to all
+        if (activeRinks.size === 0) {
+          rinkFilters.querySelector('[data-rink="all"]').classList.add('active');
+        }
+      }
+      render();
+    });
+
+    // Range selector
+    document.getElementById('range-selector').addEventListener('click', (e) => {
+      const btn = e.target.closest('.range-btn');
+      if (!btn) return;
+      document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      daysRange = parseInt(btn.dataset.range, 10);
+      render();
+    });
+  }
+
+  // Load data
+  async function init() {
+    try {
+      const resp = await fetch('data/schedules.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      scheduleData = await resp.json();
+
+      // Update timestamp
+      const updated = document.getElementById('updated');
+      if (scheduleData.last_updated) {
+        const d = new Date(scheduleData.last_updated);
+        updated.textContent = `Updated ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`;
+      }
+
+      initFilters();
+      render();
+    } catch (err) {
+      document.getElementById('main').innerHTML = `
+        <div class="empty-state">
+          <div class="icon">⚠️</div>
+          <p>Failed to load schedule data. Please try again later.</p>
+          <p style="font-size: 0.75rem; margin-top: 8px; color: var(--text-dim);">${err.message}</p>
+        </div>`;
+    }
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
