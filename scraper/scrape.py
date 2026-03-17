@@ -7,6 +7,7 @@ Scrapes ice rink schedules from:
 - County Ice Center (QuickScores PDF)
 - SLC Sports Complex (QuickScores PDF)
 - Cottonwood Heights Rec Center (HTML + PDF)
+- Utah Mammoth Ice Center (BondSports API)
 
 Outputs a unified schedules.json for the frontend.
 """
@@ -74,6 +75,15 @@ RINKS = [
         "lat": 40.6198,
         "lng": -111.8106,
     },
+    {
+        "id": "mammoth",
+        "name": "Utah Mammoth Ice Center",
+        "phone": "801-325-7000",
+        "address": "10450 S State Street STE 2200A, Sandy, UT 84070",
+        "website": "https://mammothicecenter.com",
+        "lat": 40.5650,
+        "lng": -111.8880,
+    },
 ]
 
 # PDF source pages for each rink (ExtraMsg pages on QuickScores)
@@ -95,6 +105,13 @@ PDF_SOURCES = {
 COTTONWOOD_PAGES = {
     "stick_n_puck": "https://www.chparksandrecut.gov/stick-n-puck",
     "public_skate": "https://www.chparksandrecut.gov/public-ice-skating",
+}
+
+# BondSports API config for Utah Mammoth Ice Center
+BONDSPORTS_API = "https://api.bondsports.co"
+MAMMOTH_PROGRAMS = {
+    "public_skate": 12500,
+    "stick_and_puck": 12876,
 }
 
 
@@ -880,6 +897,74 @@ def scrape_cottonwood() -> list[dict]:
     return sessions
 
 
+def scrape_mammoth() -> list[dict]:
+    """Scrape Utah Mammoth Ice Center via BondSports API."""
+    sessions = []
+
+    type_map = {
+        "public_skate": "public_skate",
+        "stick_and_puck": "stick_and_puck",
+    }
+
+    for session_type, program_id in MAMMOTH_PROGRAMS.items():
+        try:
+            # Get active seasons for this program
+            seasons_url = f"{BONDSPORTS_API}/v4/programs-seasons/program/{program_id}"
+            resp = fetch(seasons_url)
+            seasons_data = resp.json()
+
+            # seasons_data may be a list or have a data key
+            season_list = seasons_data if isinstance(seasons_data, list) else seasons_data.get("data", [])
+
+            for season in season_list:
+                season_id = season.get("id") or season.get("seasonId")
+                if not season_id:
+                    continue
+
+                # Get events/segments for this season
+                try:
+                    segments_url = f"{BONDSPORTS_API}/v1/programs/segments/{season_id}?futureResources=true"
+                    seg_resp = fetch(segments_url)
+                    segments = seg_resp.json()
+
+                    # segments may be a list, nested, or None (past seasons)
+                    if segments is None:
+                        continue
+                    event_list = segments if isinstance(segments, list) else (segments.get("data") or [])
+
+                    for event in event_list:
+                        # Date format from API: "2026/03/20" or via startDateString
+                        date_str = event.get("startDateString") or event.get("date", "")
+                        start_time = event.get("startTime", "")
+                        end_time = event.get("endTime", "")
+
+                        if not date_str or not start_time or not end_time:
+                            continue
+
+                        # Normalize date from "2026/03/20" to "2026-03-20"
+                        event_date = date_str.replace("/", "-")
+
+                        # Times come as "18:30:00" - truncate to "HH:MM"
+                        start = start_time[:5]
+                        end = end_time[:5]
+
+                        sessions.append({
+                            "date": event_date,
+                            "type": type_map[session_type],
+                            "start": start,
+                            "end": end,
+                        })
+
+                    log(f"  {session_type} season {season_id}: {len(event_list)} events")
+                except Exception as e:
+                    log(f"  Warning: Failed to fetch season {season_id}: {e}")
+
+        except Exception as e:
+            log(f"  Warning: Failed to fetch {session_type} seasons: {e}")
+
+    return sessions
+
+
 def scrape_rink(rink_config: dict) -> dict:
     """Scrape a single rink and return its data."""
     rink_id = rink_config["id"]
@@ -887,6 +972,8 @@ def scrape_rink(rink_config: dict) -> dict:
 
     if rink_id == "cottonwood":
         sessions = scrape_cottonwood()
+    elif rink_id == "mammoth":
+        sessions = scrape_mammoth()
     else:
         sessions = scrape_quickscores_rink(rink_id)
 
