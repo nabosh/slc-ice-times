@@ -210,7 +210,7 @@
 
   .session {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr auto auto;
     align-items: center;
     gap: 12px;
     padding: 10px 14px;
@@ -246,9 +246,38 @@
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--text);
-    text-decoration: underline;
-    text-decoration-color: var(--border);
-    text-underline-offset: 2px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .session-links {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .session-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    color: var(--text-muted);
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  .session-link:active {
+    background: var(--border);
+    color: var(--text);
+  }
+
+  .session-link svg {
+    width: 14px;
+    height: 14px;
   }
 
   .session-type-badge {
@@ -374,8 +403,9 @@
     .filters { gap: 6px; padding: 12px 0 16px; }
     .filter-btn { font-size: 0.75rem; padding: 5px 10px; }
     .filter-divider { display: none; }
-    .session { grid-template-columns: 1fr; gap: 4px; padding: 10px 12px; }
+    .session { grid-template-columns: 1fr auto; gap: 4px; padding: 10px 12px; }
     .session-time { min-width: unset; }
+    .session-links { grid-row: 1 / 3; grid-column: 2; }
     .session-type-badge { align-self: flex-start; }
     .day-header .day-name { font-size: 0.9rem; }
   }
@@ -492,7 +522,7 @@
           maxDate.setDate(maxDate.getDate() + daysRange);
           if (sDate >= maxDate) continue;
         }
-        sessions.push({ ...s, rinkName: rink.name, rinkId: rink.id, rinkWebsite: rink.website });
+        sessions.push({ ...s, rinkName: rink.name, rinkId: rink.id, rinkWebsite: rink.website, rinkAddress: rink.address });
       }
     }
 
@@ -538,11 +568,16 @@
 
       for (const s of group.sessions) {
         const timeStr = `${formatTime(s.start)} – ${formatTime(s.end)}`;
+        const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(s.rinkAddress)}`;
         html += `
           <div class="session">
             <span class="session-time">${timeStr}</span>
             <div class="session-info">
-              <a class="session-rink" href="${s.rinkWebsite}" target="_blank" rel="noopener">${s.rinkName}</a>
+              <span class="session-rink">${s.rinkName}</span>
+            </div>
+            <div class="session-links">
+              <a class="session-link" href="${s.rinkWebsite}" target="_blank" rel="noopener" aria-label="Visit ${s.rinkName} website"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+              <a class="session-link" href="${mapsUrl}" target="_blank" rel="noopener" aria-label="Get directions to ${s.rinkName}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a>
             </div>
             <span class="session-type-badge ${s.type}">${TYPE_LABELS[s.type] || s.type}</span>
           </div>`;
