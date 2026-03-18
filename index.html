@@ -245,6 +245,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+    text-underline-offset: 2px;
   }
 
   .session-type-badge {
@@ -488,7 +492,7 @@
           maxDate.setDate(maxDate.getDate() + daysRange);
           if (sDate >= maxDate) continue;
         }
-        sessions.push({ ...s, rinkName: rink.name, rinkId: rink.id });
+        sessions.push({ ...s, rinkName: rink.name, rinkId: rink.id, rinkWebsite: rink.website });
       }
     }
 
@@ -538,7 +542,7 @@
           <div class="session">
             <span class="session-time">${timeStr}</span>
             <div class="session-info">
-              <span class="session-rink">${s.rinkName}</span>
+              <a class="session-rink" href="${s.rinkWebsite}" target="_blank" rel="noopener">${s.rinkName}</a>
             </div>
             <span class="session-type-badge ${s.type}">${TYPE_LABELS[s.type] || s.type}</span>
           </div>`;
