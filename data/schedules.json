@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-03-19T15:18:22.166672+00:00",
+  "last_updated": "2026-03-20T01:30:32.051393+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -1891,188 +1891,7 @@
       "website": "https://slco.org/slc-sports-complex-ice",
       "lat": 40.7537,
       "lng": -111.8345,
-      "sessions": [
-        {
-          "date": "2026-02-09",
-          "type": "stick_and_puck",
-          "start": "06:15",
-          "end": "07:15"
-        },
-        {
-          "date": "2026-02-09",
-          "type": "stick_and_puck",
-          "start": "07:30",
-          "end": "08:30"
-        },
-        {
-          "date": "2026-02-09",
-          "type": "stick_and_puck",
-          "start": "10:30",
-          "end": "11:30"
-        },
-        {
-          "date": "2026-02-09",
-          "type": "stick_and_puck",
-          "start": "11:30",
-          "end": "12:30"
-        },
-        {
-          "date": "2026-02-09",
-          "type": "stick_and_puck",
-          "start": "12:45",
-          "end": "13:45"
-        },
-        {
-          "date": "2026-02-09",
-          "type": "stick_and_puck",
-          "start": "13:45",
-          "end": "14:45"
-        },
-        {
-          "date": "2026-02-10",
-          "type": "stick_and_puck",
-          "start": "12:45",
-          "end": "13:45"
-        },
-        {
-          "date": "2026-02-10",
-          "type": "stick_and_puck",
-          "start": "13:45",
-          "end": "14:45"
-        },
-        {
-          "date": "2026-02-11",
-          "type": "stick_and_puck",
-          "start": "09:45",
-          "end": "10:45"
-        },
-        {
-          "date": "2026-02-11",
-          "type": "stick_and_puck",
-          "start": "10:45",
-          "end": "11:45"
-        },
-        {
-          "date": "2026-02-11",
-          "type": "drop_in",
-          "start": "12:00",
-          "end": "13:30"
-        },
-        {
-          "date": "2026-02-11",
-          "type": "stick_and_puck",
-          "start": "13:45",
-          "end": "14:45"
-        },
-        {
-          "date": "2026-02-12",
-          "type": "stick_and_puck",
-          "start": "06:00",
-          "end": "07:00"
-        },
-        {
-          "date": "2026-02-12",
-          "type": "stick_and_puck",
-          "start": "12:45",
-          "end": "13:45"
-        },
-        {
-          "date": "2026-02-12",
-          "type": "stick_and_puck",
-          "start": "13:45",
-          "end": "14:45"
-        },
-        {
-          "date": "2026-02-13",
-          "type": "drop_in",
-          "start": "06:00",
-          "end": "07:30"
-        },
-        {
-          "date": "2026-02-13",
-          "type": "stick_and_puck",
-          "start": "09:00",
-          "end": "10:00"
-        },
-        {
-          "date": "2026-02-13",
-          "type": "stick_and_puck",
-          "start": "10:15",
-          "end": "11:15"
-        },
-        {
-          "date": "2026-02-13",
-          "type": "stick_and_puck",
-          "start": "11:30",
-          "end": "12:30"
-        },
-        {
-          "date": "2026-02-13",
-          "type": "stick_and_puck",
-          "start": "12:45",
-          "end": "13:45"
-        },
-        {
-          "date": "2026-02-17",
-          "type": "stick_and_puck",
-          "start": "12:45",
-          "end": "13:45"
-        },
-        {
-          "date": "2026-02-17",
-          "type": "stick_and_puck",
-          "start": "13:45",
-          "end": "14:45"
-        },
-        {
-          "date": "2026-02-18",
-          "type": "stick_and_puck",
-          "start": "09:45",
-          "end": "10:45"
-        },
-        {
-          "date": "2026-02-18",
-          "type": "stick_and_puck",
-          "start": "10:45",
-          "end": "11:45"
-        },
-        {
-          "date": "2026-02-18",
-          "type": "drop_in",
-          "start": "12:00",
-          "end": "13:30"
-        },
-        {
-          "date": "2026-02-18",
-          "type": "stick_and_puck",
-          "start": "13:45",
-          "end": "14:45"
-        },
-        {
-          "date": "2026-02-19",
-          "type": "stick_and_puck",
-          "start": "06:00",
-          "end": "07:00"
-        },
-        {
-          "date": "2026-02-19",
-          "type": "stick_and_puck",
-          "start": "12:15",
-          "end": "13:15"
-        },
-        {
-          "date": "2026-02-19",
-          "type": "stick_and_puck",
-          "start": "13:30",
-          "end": "14:30"
-        },
-        {
-          "date": "2026-02-20",
-          "type": "drop_in",
-          "start": "06:00",
-          "end": "07:30"
-        }
-      ]
+      "sessions": []
     },
     {
       "id": "cottonwood",
@@ -2517,12 +2336,6 @@
         {
           "date": "2026-03-19",
           "type": "stick_and_puck",
-          "start": "16:15",
-          "end": "17:15"
-        },
-        {
-          "date": "2026-03-19",
-          "type": "stick_and_puck",
           "start": "19:00",
           "end": "20:00"
         },
@@ -2612,6 +2425,12 @@
         },
         {
           "date": "2026-04-01",
+          "type": "stick_and_puck",
+          "start": "16:15",
+          "end": "17:15"
+        },
+        {
+          "date": "2026-04-02",
           "type": "stick_and_puck",
           "start": "16:15",
           "end": "17:15"
