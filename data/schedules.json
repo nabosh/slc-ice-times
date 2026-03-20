@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-03-20T01:30:32.051393+00:00",
+  "last_updated": "2026-03-20T15:16:44.022927+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -2333,12 +2333,6 @@
       "lat": 40.565,
       "lng": -111.888,
       "sessions": [
-        {
-          "date": "2026-03-19",
-          "type": "stick_and_puck",
-          "start": "19:00",
-          "end": "20:00"
-        },
         {
           "date": "2026-03-20",
           "type": "stick_and_puck",
