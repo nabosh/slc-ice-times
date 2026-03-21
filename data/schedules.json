@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-03-20T15:16:44.022927+00:00",
+  "last_updated": "2026-03-21T01:30:23.057486+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -2335,12 +2335,6 @@
       "sessions": [
         {
           "date": "2026-03-20",
-          "type": "stick_and_puck",
-          "start": "16:15",
-          "end": "17:15"
-        },
-        {
-          "date": "2026-03-20",
           "type": "public_skate",
           "start": "18:30",
           "end": "20:00"
@@ -2434,12 +2428,6 @@
           "type": "public_skate",
           "start": "19:00",
           "end": "20:30"
-        },
-        {
-          "date": "2026-04-04",
-          "type": "public_skate",
-          "start": "19:45",
-          "end": "21:15"
         },
         {
           "date": "2026-04-05",
