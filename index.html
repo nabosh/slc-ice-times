@@ -359,6 +359,39 @@
     font-size: 0.9rem;
   }
 
+  .empty-state-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .empty-state-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    border: 1px solid var(--border);
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .empty-state-links a:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .empty-state-links a svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
   /* ---- Footer ---- */
   footer {
     text-align: center;
@@ -456,6 +489,8 @@
     </p>
     <p style="margin-top: 6px;">
       <a href="https://github.com/nabosh/slc-ice-times" target="_blank" rel="noopener">Source on GitHub</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/nabosh/slc-ice-times/issues" target="_blank" rel="noopener">Report an issue</a>
     </p>
   </footer>
 </div>
@@ -530,10 +565,29 @@
     sessions.sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
 
     if (sessions.length === 0) {
+      // Build links for selected rinks (or all rinks if none selected)
+      const selectedRinks = scheduleData.rinks.filter(r =>
+        activeRinks.size === 0 || activeRinks.has(r.id)
+      );
+      const websiteIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+      const mapIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+      const rinkLinks = selectedRinks.map(r => {
+        const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(r.address)}`;
+        return `<a href="${r.website}" target="_blank" rel="noopener">${websiteIcon} ${r.name}</a>
+                <a href="${mapsUrl}" target="_blank" rel="noopener">${mapIcon} Directions</a>`;
+      }).join('');
+
       main.innerHTML = `
         <div class="empty-state">
           <div class="icon">🏒</div>
           <p>No sessions found for the selected filters.</p>
+          <div class="empty-state-links">
+            ${rinkLinks}
+          </div>
+          <p style="margin-top: 20px; font-size: 0.8rem;">
+            Think this is wrong?
+            <a href="https://github.com/nabosh/slc-ice-times/issues" target="_blank" rel="noopener" style="color: var(--accent);">Let us know</a>
+          </p>
         </div>`;
       return;
     }
