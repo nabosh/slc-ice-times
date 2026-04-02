@@ -5,7 +5,7 @@ SLC Ice Times Scraper
 Scrapes ice rink schedules from:
 - Acord Ice Center (QuickScores PDF)
 - County Ice Center (QuickScores PDF)
-- SLC Sports Complex (QuickScores PDF)
+- SLC Sports Complex (Salt Lake County Amilia proxy API)
 - Cottonwood Heights Rec Center (HTML + PDF)
 - Utah Mammoth Ice Center (BondSports API)
 
@@ -15,9 +15,10 @@ Outputs a unified schedules.json for the frontend.
 import json
 import re
 import sys
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from io import BytesIO
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import pdfplumber
 import requests
@@ -62,7 +63,7 @@ RINKS = [
         "name": "SLC Sports Complex",
         "phone": "385-468-1918",
         "address": "645 S Guardsman Way, Salt Lake City, UT 84108",
-        "website": "https://slco.org/slc-sports-complex-ice",
+        "website": "https://www.saltlakecounty.gov/parks-recreation/facilities-and-golf/ice-centers/slc-sports-complex-ice/",
         "lat": 40.7537,
         "lng": -111.8345,
     },
@@ -96,10 +97,13 @@ PDF_SOURCES = {
         f"{QUICKSCORES_BASE}/Orgs/ExtraMsg.php?OrgDir=slchockey&ExtraMsgID=15151",  # SPDI
         f"{QUICKSCORES_BASE}/Orgs/ExtraMsg.php?OrgDir=slchockey&ExtraMsgID=15155",  # Public
     ],
-    "sports_complex": [
-        f"{QUICKSCORES_BASE}/Orgs/ExtraMsg.php?OrgDir=sportscomplex&ExtraMsgID=14779",  # SPDI
-        f"{QUICKSCORES_BASE}/Orgs/ExtraMsg.php?OrgDir=sportscomplex&ExtraMsgID=15841",  # Public
-    ],
+}
+
+# Salt Lake County Amilia proxy API config for SLC Sports Complex
+SLCO_AMILIA_API = "https://www.saltlakecounty.gov/api/proxy/AmiliaConnection/GetSchedulesByCenter"
+SLCO_SPORTS_COMPLEX = {
+    "id": "slc-sports-complex",
+    "loc_id": "2451775,2451994",
 }
 
 COTTONWOOD_PAGES = {
@@ -897,6 +901,132 @@ def scrape_cottonwood() -> list[dict]:
     return sessions
 
 
+def _fetch_sports_complex_page(select_date: str = "") -> list[dict]:
+    """Fetch one page of Sports Complex events from the SLCo Amilia proxy API."""
+    resp = requests.post(
+        SLCO_AMILIA_API,
+        headers={**HEADERS, "Content-Type": "application/json; charset=utf-8"},
+        json={
+            "ID": SLCO_SPORTS_COMPLEX["id"],
+            "LocId": SLCO_SPORTS_COMPLEX["loc_id"],
+            "SelectDate": select_date,
+            "Filter": "",
+        },
+        timeout=30,
+    )
+    resp.raise_for_status()
+    return resp.json()
+
+
+# Maximum reasonable session duration in hours
+_MAX_SESSION_HOURS = 4
+
+
+def scrape_sports_complex() -> list[dict]:
+    """Scrape SLC Sports Complex via Salt Lake County Amilia proxy API.
+
+    The API returns 1-2 days of data per call (more for the initial empty
+    date call). We page forward by advancing past the last returned date
+    until we hit the horizon or get consecutive empty responses.
+    """
+    mt = ZoneInfo("America/Denver")
+    today = date.today()
+    horizon = today + timedelta(days=60)
+    all_events = []
+    seen_dates = set()
+    empty_streak = 0
+
+    select_date = ""
+    for _ in range(60):  # safety limit
+        try:
+            events = _fetch_sports_complex_page(select_date)
+        except Exception as e:
+            log(f"  Warning: Failed to fetch (date={select_date!r}): {e}")
+            break
+
+        if not events:
+            empty_streak += 1
+            if empty_streak >= 3:
+                log(f"  No more data after 3 consecutive empty responses")
+                break
+            # Skip ahead one day and try again
+            skip = date.fromisoformat(select_date) + timedelta(days=1) if select_date else today + timedelta(days=1)
+            select_date = skip.isoformat()
+            continue
+
+        empty_streak = 0
+        all_events.extend(events)
+
+        # Advance past the last date in this batch
+        last_date_str = max(e["StartTime"][:10] for e in events)
+        last_date = date.fromisoformat(last_date_str)
+        next_date = last_date + timedelta(days=1)
+
+        if next_date > horizon:
+            break
+
+        # Guard against getting stuck on the same dates
+        if last_date_str in seen_dates:
+            next_date = last_date + timedelta(days=2)
+        seen_dates.add(last_date_str)
+
+        select_date = next_date.isoformat()
+
+    log(f"  Fetched {len(all_events)} total events across pages")
+
+    sessions = []
+    for event in all_events:
+        title = (event.get("Title") or "").lower()
+        category = (event.get("Category") or "").lower()
+        sub = (event.get("SubCategory") or "").lower()
+        combined = f"{title} {category} {sub}"
+
+        # Skip hidden/internal entries
+        if "do not delete" in combined or "keep hidden" in combined:
+            continue
+
+        # Classify session type
+        if "stick" in title and "puck" in title:
+            stype = "stick_and_puck"
+        elif "drop in hockey" in title or "drop in hockey" in category:
+            stype = "drop_in"
+        elif "public skat" in title or "public skate" in category:
+            stype = "public_skate"
+        else:
+            continue
+
+        start_str = event.get("StartTime", "")
+        end_str = event.get("EndTime", "")
+        if not start_str or not end_str:
+            continue
+
+        # Parse ISO timestamps (UTC) — "2026-04-02T15:45:00+00:00"
+        try:
+            start_dt = datetime.fromisoformat(start_str)
+            end_dt = datetime.fromisoformat(end_str)
+        except (ValueError, TypeError):
+            continue
+
+        # Sanity check: skip sessions longer than _MAX_SESSION_HOURS
+        duration_hours = (end_dt - start_dt).total_seconds() / 3600
+        if duration_hours > _MAX_SESSION_HOURS or duration_hours <= 0:
+            log(f"  Skipping suspect duration ({duration_hours:.1f}h): {event.get('Title')}")
+            continue
+
+        start_local = start_dt.astimezone(mt)
+        end_local = end_dt.astimezone(mt)
+
+        sessions.append({
+            "date": start_local.strftime("%Y-%m-%d"),
+            "type": stype,
+            "start": start_local.strftime("%H:%M"),
+            "end": end_local.strftime("%H:%M"),
+        })
+
+    log(f"  Found {len(sessions)} sessions from Amilia API")
+    return sessions
+
+
 def scrape_mammoth() -> list[dict]:
     """Scrape Utah Mammoth Ice Center via BondSports API."""
     sessions = []
@@ -974,6 +1104,8 @@ def scrape_rink(rink_config: dict) -> dict:
         sessions = scrape_cottonwood()
     elif rink_id == "mammoth":
         sessions = scrape_mammoth()
+    elif rink_id == "sports_complex":
+        sessions = scrape_sports_complex()
     else:
         sessions = scrape_quickscores_rink(rink_id)
 
