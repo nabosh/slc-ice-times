@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-15T01:31:21.500317+00:00",
+  "last_updated": "2026-04-15T15:29:09.072183+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -1995,36 +1995,6 @@
       "lng": -111.8345,
       "sessions": [
         {
-          "date": "2026-04-14",
-          "type": "stick_and_puck",
-          "start": "08:15",
-          "end": "09:15"
-        },
-        {
-          "date": "2026-04-14",
-          "type": "public_skate",
-          "start": "09:45",
-          "end": "11:45"
-        },
-        {
-          "date": "2026-04-14",
-          "type": "stick_and_puck",
-          "start": "15:15",
-          "end": "16:15"
-        },
-        {
-          "date": "2026-04-14",
-          "type": "public_skate",
-          "start": "15:15",
-          "end": "17:14"
-        },
-        {
-          "date": "2026-04-14",
-          "type": "public_skate",
-          "start": "19:00",
-          "end": "21:00"
-        },
-        {
           "date": "2026-04-15",
           "type": "stick_and_puck",
           "start": "08:15",
@@ -2923,18 +2893,6 @@
       "lng": -111.888,
       "sessions": [
         {
-          "date": "2026-04-14",
-          "type": "stick_and_puck",
-          "start": "18:45",
-          "end": "20:00"
-        },
-        {
-          "date": "2026-04-15",
-          "type": "stick_and_puck",
-          "start": "06:00",
-          "end": "07:00"
-        },
-        {
           "date": "2026-04-15",
           "type": "stick_and_puck",
           "start": "16:15",
@@ -3103,6 +3061,12 @@
           "end": "17:15"
         },
         {
+          "date": "2026-04-29",
+          "type": "stick_and_puck",
+          "start": "06:00",
+          "end": "07:00"
+        },
+        {
           "date": "2026-05-02",
           "type": "public_skate",
           "start": "19:45",
@@ -3197,6 +3161,12 @@
           "type": "public_skate",
           "start": "19:00",
           "end": "20:30"
+        },
+        {
+          "date": "2026-06-13",
+          "type": "public_skate",
+          "start": "19:45",
+          "end": "21:15"
         }
       ]
     }
