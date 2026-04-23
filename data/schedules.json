@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-23T01:31:42.857418+00:00",
+  "last_updated": "2026-04-23T15:36:22.120809+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -2001,48 +2001,6 @@
       "lng": -111.8345,
       "sessions": [
         {
-          "date": "2026-04-22",
-          "type": "stick_and_puck",
-          "start": "08:15",
-          "end": "09:15"
-        },
-        {
-          "date": "2026-04-22",
-          "type": "public_skate",
-          "start": "09:00",
-          "end": "11:00"
-        },
-        {
-          "date": "2026-04-22",
-          "type": "stick_and_puck",
-          "start": "09:30",
-          "end": "10:30"
-        },
-        {
-          "date": "2026-04-22",
-          "type": "stick_and_puck",
-          "start": "10:45",
-          "end": "11:45"
-        },
-        {
-          "date": "2026-04-22",
-          "type": "drop_in",
-          "start": "12:15",
-          "end": "13:45"
-        },
-        {
-          "date": "2026-04-22",
-          "type": "stick_and_puck",
-          "start": "15:15",
-          "end": "16:15"
-        },
-        {
-          "date": "2026-04-22",
-          "type": "stick_and_puck",
-          "start": "16:30",
-          "end": "17:30"
-        },
-        {
           "date": "2026-04-23",
           "type": "public_skate",
           "start": "09:45",
@@ -2139,64 +2097,46 @@
           "end": "17:14"
         },
         {
-          "date": "2026-04-29",
+          "date": "2026-04-28",
           "type": "stick_and_puck",
           "start": "08:15",
           "end": "09:15"
         },
         {
-          "date": "2026-04-29",
+          "date": "2026-04-28",
           "type": "public_skate",
-          "start": "09:00",
-          "end": "11:00"
-        },
-        {
-          "date": "2026-04-29",
-          "type": "stick_and_puck",
-          "start": "09:30",
-          "end": "10:30"
-        },
-        {
-          "date": "2026-04-29",
-          "type": "stick_and_puck",
-          "start": "10:45",
+          "start": "09:45",
           "end": "11:45"
         },
         {
-          "date": "2026-04-29",
-          "type": "drop_in",
-          "start": "12:15",
-          "end": "13:45"
-        },
-        {
-          "date": "2026-04-29",
+          "date": "2026-04-28",
           "type": "stick_and_puck",
           "start": "15:15",
           "end": "16:15"
         },
         {
-          "date": "2026-04-29",
+          "date": "2026-04-28",
+          "type": "public_skate",
+          "start": "15:15",
+          "end": "17:14"
+        },
+        {
+          "date": "2026-04-28",
           "type": "stick_and_puck",
           "start": "16:30",
           "end": "17:30"
         },
         {
-          "date": "2026-05-01",
-          "type": "drop_in",
-          "start": "06:00",
-          "end": "07:30"
+          "date": "2026-04-28",
+          "type": "public_skate",
+          "start": "19:00",
+          "end": "21:00"
         },
         {
-          "date": "2026-05-01",
+          "date": "2026-04-30",
           "type": "public_skate",
-          "start": "09:00",
-          "end": "11:00"
-        },
-        {
-          "date": "2026-05-01",
-          "type": "public_skate",
-          "start": "15:15",
-          "end": "17:15"
+          "start": "09:45",
+          "end": "11:45"
         },
         {
           "date": "2026-05-02",
@@ -3153,12 +3093,6 @@
         {
           "date": "2026-04-23",
           "type": "stick_and_puck",
-          "start": "06:00",
-          "end": "07:00"
-        },
-        {
-          "date": "2026-04-23",
-          "type": "stick_and_puck",
           "start": "16:15",
           "end": "17:15"
         },
@@ -3293,6 +3227,12 @@
           "type": "stick_and_puck",
           "start": "16:00",
           "end": "17:00"
+        },
+        {
+          "date": "2026-05-07",
+          "type": "stick_and_puck",
+          "start": "06:00",
+          "end": "07:00"
         },
         {
           "date": "2026-05-10",
