@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-23T15:36:22.120809+00:00",
+  "last_updated": "2026-04-24T01:32:00.063090+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -2667,48 +2667,6 @@
           "end": "17:30"
         },
         {
-          "date": "2026-05-29",
-          "type": "drop_in",
-          "start": "06:00",
-          "end": "07:30"
-        },
-        {
-          "date": "2026-05-29",
-          "type": "stick_and_puck",
-          "start": "08:00",
-          "end": "09:00"
-        },
-        {
-          "date": "2026-05-29",
-          "type": "public_skate",
-          "start": "09:00",
-          "end": "11:00"
-        },
-        {
-          "date": "2026-05-29",
-          "type": "stick_and_puck",
-          "start": "09:15",
-          "end": "10:15"
-        },
-        {
-          "date": "2026-05-29",
-          "type": "stick_and_puck",
-          "start": "12:15",
-          "end": "13:15"
-        },
-        {
-          "date": "2026-05-29",
-          "type": "stick_and_puck",
-          "start": "13:30",
-          "end": "14:30"
-        },
-        {
-          "date": "2026-05-29",
-          "type": "public_skate",
-          "start": "15:15",
-          "end": "17:15"
-        },
-        {
           "date": "2026-05-30",
           "type": "stick_and_puck",
           "start": "09:00",
@@ -3091,12 +3049,6 @@
       "lng": -111.888,
       "sessions": [
         {
-          "date": "2026-04-23",
-          "type": "stick_and_puck",
-          "start": "16:15",
-          "end": "17:15"
-        },
-        {
           "date": "2026-04-24",
           "type": "stick_and_puck",
           "start": "06:00",
@@ -3233,6 +3185,12 @@
           "type": "stick_and_puck",
           "start": "06:00",
           "end": "07:00"
+        },
+        {
+          "date": "2026-05-07",
+          "type": "stick_and_puck",
+          "start": "16:15",
+          "end": "17:15"
         },
         {
           "date": "2026-05-10",
