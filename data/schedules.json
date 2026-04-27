@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-26T15:16:34.991702+00:00",
+  "last_updated": "2026-04-27T01:31:49.059481+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -3078,12 +3078,6 @@
       "lat": 40.565,
       "lng": -111.888,
       "sessions": [
-        {
-          "date": "2026-04-26",
-          "type": "public_skate",
-          "start": "15:00",
-          "end": "16:30"
-        },
         {
           "date": "2026-04-26",
           "type": "stick_and_puck",
