@@ -8,6 +8,7 @@ Scrapes ice rink schedules from:
 - SLC Sports Complex (Salt Lake County Amilia proxy API)
 - Cottonwood Heights Rec Center (HTML + PDF)
 - Utah Mammoth Ice Center (BondSports API)
+- Provo City Peaks Ice Arena (DaySmart Recreation API)
 
 Outputs a unified schedules.json for the frontend.
 """
@@ -85,6 +86,15 @@ RINKS = [
         "lat": 40.5650,
         "lng": -111.8880,
     },
+    {
+        "id": "peaks",
+        "name": "Peaks Ice Arena",
+        "phone": "801-852-7465",
+        "address": "100 N Seven Peaks Blvd, Provo, UT 84606",
+        "website": "https://www.provo.gov/394/Peaks-Ice-Arena/Peaks",
+        "lat": 40.234791,
+        "lng": -111.638177,
+    },
 ]
 
 # PDF source pages for each rink (ExtraMsg pages on QuickScores)
@@ -109,6 +119,24 @@ SLCO_SPORTS_COMPLEX = {
 COTTONWOOD_PAGES = {
     "stick_n_puck": "https://www.chparksandrecut.gov/stick-n-puck",
     "public_skate": "https://www.chparksandrecut.gov/public-ice-skating",
+}
+
+# DaySmart Recreation API — generic config keyed by rink_id
+DAYSMART_API = "https://api.daysmartrecreation.com/v1/events"
+DAYSMART_RINKS = {
+    "peaks": {"company": "provo"},
+}
+# DaySmart eventType.name → our session type taxonomy.
+# Unmapped types (eg "Freestyle") are skipped.
+DAYSMART_TYPE_MAP = {
+    "sticktime": "stick_and_puck",
+    "stick & puck": "stick_and_puck",
+    "stick and puck": "stick_and_puck",
+    "public skate": "public_skate",
+    "drop in hockey": "drop_in",
+    "drop-in hockey": "drop_in",
+    "drop in": "drop_in",
+    "drop-in": "drop_in",
 }
 
 # BondSports API config for Utah Mammoth Ice Center
@@ -1095,6 +1123,100 @@ def scrape_mammoth() -> list[dict]:
     return sessions
 
 
+def scrape_daysmart(rink_id: str) -> list[dict]:
+    """Scrape a DaySmart Recreation-backed rink via its public events API.
+
+    DaySmart returns events in JSON:API format, paginated. Times are local to
+    the facility's tz (no offset in the `start`/`end` strings).
+    """
+    cfg = DAYSMART_RINKS[rink_id]
+    company = cfg["company"]
+
+    today = date.today()
+    horizon = today + timedelta(days=60)
+    start_filter = f"{today.isoformat()} 00:00:00"
+    end_filter = f"{horizon.isoformat()} 23:59:59"
+
+    sessions = []
+    skipped_types: dict[str, int] = {}
+    page = 1
+    page_size = 100
+    while True:
+        params = {
+            "company": company,
+            "page[size]": page_size,
+            "page[number]": page,
+            "sort": "start",
+            "filter[start__gte]": start_filter,
+            "filter[start__lte]": end_filter,
+            "filter[resource.facility.my_sam_visible]": "true",
+            "filter[eventType.code__not]": "L",
+            "include": "eventType,resource.facility",
+        }
+        try:
+            resp = requests.get(DAYSMART_API, params=params, headers=HEADERS, timeout=30)
+            resp.raise_for_status()
+            payload = resp.json()
+        except Exception as e:
+            log(f"  Warning: DaySmart fetch failed (page {page}): {e}")
+            break
+
+        # Build event-type id → name lookup from `included`
+        type_names: dict[str, str] = {}
+        for inc in payload.get("included", []) or []:
+            if inc.get("type") == "event-types":
+                type_names[str(inc.get("id"))] = (inc.get("attributes", {}).get("name") or "").strip()
+
+        data = payload.get("data", []) or []
+        for event in data:
+            attrs = event.get("attributes", {}) or {}
+            rels = event.get("relationships", {}) or {}
+            et_id = (((rels.get("eventType") or {}).get("data") or {}).get("id"))
+            et_name = type_names.get(str(et_id), "").lower().strip()
+            stype = DAYSMART_TYPE_MAP.get(et_name)
+            if not stype:
+                if et_name:
+                    skipped_types[et_name] = skipped_types.get(et_name, 0) + 1
+                continue
+
+            start_str = attrs.get("start") or ""
+            end_str = attrs.get("end") or ""
+            # Format: "2026-05-01T06:00:00" (facility-local)
+            if "T" not in start_str or "T" not in end_str:
+                continue
+            date_part, start_t = start_str.split("T", 1)
+            _, end_t = end_str.split("T", 1)
+
+            # Sanity-check duration (mirrors sports_complex)
+            try:
+                sdt = datetime.fromisoformat(start_str)
+                edt = datetime.fromisoformat(end_str)
+                duration_hours = (edt - sdt).total_seconds() / 3600
+            except (ValueError, TypeError):
+                continue
+            if duration_hours <= 0 or duration_hours > _MAX_SESSION_HOURS:
+                log(f"  Skipping suspect duration ({duration_hours:.1f}h): {et_name} {start_str}")
+                continue
+
+            sessions.append({
+                "date": date_part,
+                "type": stype,
+                "start": start_t[:5],
+                "end": end_t[:5],
+            })
+
+        meta_page = (payload.get("meta") or {}).get("page") or {}
+        last_page = meta_page.get("last-page") or 1
+        if page >= last_page:
+            break
+        page += 1
+
+    if skipped_types:
+        log(f"  DaySmart skipped event types: {skipped_types}")
+    log(f"  Found {len(sessions)} sessions from DaySmart ({company})")
+    return sessions
+
+
 def scrape_rink(rink_config: dict) -> dict:
     """Scrape a single rink and return its data."""
     rink_id = rink_config["id"]
@@ -1106,6 +1228,8 @@ def scrape_rink(rink_config: dict) -> dict:
         sessions = scrape_mammoth()
     elif rink_id == "sports_complex":
         sessions = scrape_sports_complex()
+    elif rink_id in DAYSMART_RINKS:
+        sessions = scrape_daysmart(rink_id)
     else:
         sessions = scrape_quickscores_rink(rink_id)
 
