@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-13T01:33:46.004382+00:00",
+  "last_updated": "2026-05-13T15:54:28.087775+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -2127,54 +2127,6 @@
       "lng": -111.8345,
       "sessions": [
         {
-          "date": "2026-05-12",
-          "type": "stick_and_puck",
-          "start": "08:15",
-          "end": "09:15"
-        },
-        {
-          "date": "2026-05-12",
-          "type": "stick_and_puck",
-          "start": "09:30",
-          "end": "10:30"
-        },
-        {
-          "date": "2026-05-12",
-          "type": "public_skate",
-          "start": "09:45",
-          "end": "11:45"
-        },
-        {
-          "date": "2026-05-12",
-          "type": "stick_and_puck",
-          "start": "12:15",
-          "end": "13:15"
-        },
-        {
-          "date": "2026-05-12",
-          "type": "stick_and_puck",
-          "start": "13:30",
-          "end": "14:30"
-        },
-        {
-          "date": "2026-05-12",
-          "type": "stick_and_puck",
-          "start": "15:15",
-          "end": "16:15"
-        },
-        {
-          "date": "2026-05-12",
-          "type": "public_skate",
-          "start": "15:15",
-          "end": "17:15"
-        },
-        {
-          "date": "2026-05-12",
-          "type": "stick_and_puck",
-          "start": "16:30",
-          "end": "17:30"
-        },
-        {
           "date": "2026-05-13",
           "type": "stick_and_puck",
           "start": "08:15",
@@ -2955,12 +2907,6 @@
         {
           "date": "2026-05-13",
           "type": "stick_and_puck",
-          "start": "06:00",
-          "end": "07:00"
-        },
-        {
-          "date": "2026-05-13",
-          "type": "stick_and_puck",
           "start": "16:15",
           "end": "17:15"
         },
@@ -3119,6 +3065,12 @@
           "type": "stick_and_puck",
           "start": "16:15",
           "end": "17:15"
+        },
+        {
+          "date": "2026-05-27",
+          "type": "stick_and_puck",
+          "start": "06:00",
+          "end": "07:00"
         },
         {
           "date": "2026-05-29",
