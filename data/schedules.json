@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-09T01:33:39.191570+00:00",
+  "last_updated": "2026-06-09T16:01:30.469204+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -1635,24 +1635,6 @@
       "lng": -111.8345,
       "sessions": [
         {
-          "date": "2026-06-08",
-          "type": "stick_and_puck",
-          "start": "07:30",
-          "end": "08:30"
-        },
-        {
-          "date": "2026-06-08",
-          "type": "public_skate",
-          "start": "09:00",
-          "end": "11:00"
-        },
-        {
-          "date": "2026-06-08",
-          "type": "public_skate",
-          "start": "15:15",
-          "end": "17:15"
-        },
-        {
           "date": "2026-06-09",
           "type": "stick_and_puck",
           "start": "07:30",
@@ -1723,6 +1705,12 @@
           "type": "drop_in",
           "start": "06:00",
           "end": "07:30"
+        },
+        {
+          "date": "2026-06-14",
+          "type": "public_skate",
+          "start": "12:30",
+          "end": "14:30"
         },
         {
           "date": "2026-06-15",
@@ -2408,18 +2396,6 @@
       "sessions": [
         {
           "date": "2026-06-09",
-          "type": "stick_and_puck",
-          "start": "06:30",
-          "end": "07:30"
-        },
-        {
-          "date": "2026-06-09",
-          "type": "stick_and_puck",
-          "start": "07:45",
-          "end": "08:45"
-        },
-        {
-          "date": "2026-06-09",
           "type": "public_skate",
           "start": "13:00",
           "end": "14:30"
@@ -2576,15 +2552,15 @@
         },
         {
           "date": "2026-06-14",
-          "type": "stick_and_puck",
-          "start": "15:45",
-          "end": "16:45"
-        },
-        {
-          "date": "2026-06-14",
           "type": "public_skate",
           "start": "16:00",
           "end": "17:30"
+        },
+        {
+          "date": "2026-06-14",
+          "type": "stick_and_puck",
+          "start": "16:15",
+          "end": "17:15"
         },
         {
           "date": "2026-06-14",
