@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-29T01:40:28.795178+00:00",
+  "last_updated": "2026-06-29T16:18:49.007995+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -1653,24 +1653,6 @@
       "lng": -111.8345,
       "sessions": [
         {
-          "date": "2026-06-28",
-          "type": "stick_and_puck",
-          "start": "10:15",
-          "end": "11:15"
-        },
-        {
-          "date": "2026-06-28",
-          "type": "public_skate",
-          "start": "12:30",
-          "end": "14:30"
-        },
-        {
-          "date": "2026-06-28",
-          "type": "stick_and_puck",
-          "start": "13:15",
-          "end": "14:15"
-        },
-        {
           "date": "2026-06-29",
           "type": "stick_and_puck",
           "start": "07:30",
@@ -2672,10 +2654,46 @@
           "end": "06:30"
         },
         {
+          "date": "2026-07-01",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-03",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-03",
+          "type": "public_skate",
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-07-04",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-05",
+          "type": "public_skate",
+          "start": "11:30",
+          "end": "13:30"
+        },
+        {
           "date": "2026-07-06",
           "type": "stick_and_puck",
           "start": "05:30",
           "end": "06:30"
+        },
+        {
+          "date": "2026-07-06",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
         },
         {
           "date": "2026-07-07",
@@ -2696,10 +2714,46 @@
           "end": "06:30"
         },
         {
+          "date": "2026-07-08",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-10",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-10",
+          "type": "public_skate",
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-07-11",
+          "type": "public_skate",
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-07-12",
+          "type": "public_skate",
+          "start": "11:30",
+          "end": "13:30"
+        },
+        {
           "date": "2026-07-13",
           "type": "stick_and_puck",
           "start": "05:30",
           "end": "06:30"
+        },
+        {
+          "date": "2026-07-13",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
         },
         {
           "date": "2026-07-14",
@@ -2720,10 +2774,46 @@
           "end": "06:30"
         },
         {
+          "date": "2026-07-15",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-17",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-17",
+          "type": "public_skate",
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-07-18",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-19",
+          "type": "public_skate",
+          "start": "11:30",
+          "end": "13:30"
+        },
+        {
           "date": "2026-07-20",
           "type": "stick_and_puck",
           "start": "05:30",
           "end": "06:30"
+        },
+        {
+          "date": "2026-07-20",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
         },
         {
           "date": "2026-07-21",
@@ -2744,10 +2834,40 @@
           "end": "06:30"
         },
         {
+          "date": "2026-07-22",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-24",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-25",
+          "type": "public_skate",
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-07-26",
+          "type": "public_skate",
+          "start": "11:30",
+          "end": "13:30"
+        },
+        {
           "date": "2026-07-27",
           "type": "stick_and_puck",
           "start": "05:30",
           "end": "06:30"
+        },
+        {
+          "date": "2026-07-27",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
         },
         {
           "date": "2026-07-28",
@@ -2766,6 +2886,24 @@
           "type": "stick_and_puck",
           "start": "05:30",
           "end": "06:30"
+        },
+        {
+          "date": "2026-07-29",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-31",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-07-31",
+          "type": "public_skate",
+          "start": "18:00",
+          "end": "20:00"
         }
       ]
     },
