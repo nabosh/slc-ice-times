@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-30T01:37:24.365492+00:00",
+  "last_updated": "2026-06-30T15:52:20.972896+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -1352,48 +1352,6 @@
       "lat": 40.7537,
       "lng": -111.8345,
       "sessions": [
-        {
-          "date": "2026-06-29",
-          "type": "stick_and_puck",
-          "start": "07:30",
-          "end": "08:30"
-        },
-        {
-          "date": "2026-06-29",
-          "type": "public_skate",
-          "start": "09:00",
-          "end": "11:00"
-        },
-        {
-          "date": "2026-06-29",
-          "type": "stick_and_puck",
-          "start": "10:00",
-          "end": "11:00"
-        },
-        {
-          "date": "2026-06-29",
-          "type": "stick_and_puck",
-          "start": "11:15",
-          "end": "12:15"
-        },
-        {
-          "date": "2026-06-29",
-          "type": "stick_and_puck",
-          "start": "12:30",
-          "end": "13:30"
-        },
-        {
-          "date": "2026-06-29",
-          "type": "stick_and_puck",
-          "start": "13:45",
-          "end": "14:45"
-        },
-        {
-          "date": "2026-06-29",
-          "type": "public_skate",
-          "start": "15:15",
-          "end": "17:15"
-        },
         {
           "date": "2026-06-30",
           "type": "stick_and_puck",
