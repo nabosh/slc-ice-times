@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-04T15:58:46.001971+00:00",
+  "last_updated": "2026-07-05T04:47:16.970924+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -2067,6 +2067,12 @@
           "type": "public_skate",
           "start": "13:00",
           "end": "14:30"
+        },
+        {
+          "date": "2026-09-02",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "14:30"
         }
       ]
     },
@@ -3134,6 +3140,12 @@
           "type": "public_skate",
           "start": "19:00",
           "end": "21:00"
+        },
+        {
+          "date": "2026-09-03",
+          "type": "public_skate",
+          "start": "13:00",
+          "end": "14:00"
         }
       ]
     }
