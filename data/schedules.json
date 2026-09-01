@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-01T05:47:30.922370+00:00",
+  "last_updated": "2026-09-01T18:07:18.252440+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -344,12 +344,6 @@
       "lng": -111.8345,
       "sessions": [
         {
-          "date": "2026-08-31",
-          "type": "public_skate",
-          "start": "09:45",
-          "end": "11:45"
-        },
-        {
           "date": "2026-09-01",
           "type": "public_skate",
           "start": "10:30",
@@ -462,6 +456,12 @@
           "type": "public_skate",
           "start": "19:00",
           "end": "21:00"
+        },
+        {
+          "date": "2026-09-06",
+          "type": "public_skate",
+          "start": "12:30",
+          "end": "14:30"
         },
         {
           "date": "2026-09-09",
@@ -1315,12 +1315,6 @@
       "sessions": [
         {
           "date": "2026-09-01",
-          "type": "stick_and_puck",
-          "start": "07:30",
-          "end": "08:30"
-        },
-        {
-          "date": "2026-09-01",
           "type": "public_skate",
           "start": "13:00",
           "end": "14:30"
@@ -1572,12 +1566,6 @@
           "end": "17:45"
         },
         {
-          "date": "2026-09-15",
-          "type": "stick_and_puck",
-          "start": "18:00",
-          "end": "19:00"
-        },
-        {
           "date": "2026-09-16",
           "type": "stick_and_puck",
           "start": "16:30",
@@ -1738,6 +1726,12 @@
           "type": "stick_and_puck",
           "start": "14:30",
           "end": "15:30"
+        },
+        {
+          "date": "2026-10-01",
+          "type": "stick_and_puck",
+          "start": "07:15",
+          "end": "08:15"
         },
         {
           "date": "2026-10-02",
