@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-08T18:16:07.553699+00:00",
+  "last_updated": "2026-09-09T05:26:18.734638+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -1242,24 +1242,6 @@
       "lng": -111.888,
       "sessions": [
         {
-          "date": "2026-09-08",
-          "type": "public_skate",
-          "start": "13:00",
-          "end": "14:30"
-        },
-        {
-          "date": "2026-09-08",
-          "type": "stick_and_puck",
-          "start": "14:30",
-          "end": "15:45"
-        },
-        {
-          "date": "2026-09-08",
-          "type": "stick_and_puck",
-          "start": "16:15",
-          "end": "17:15"
-        },
-        {
           "date": "2026-09-09",
           "type": "stick_and_puck",
           "start": "06:15",
@@ -1276,12 +1258,6 @@
           "type": "stick_and_puck",
           "start": "07:30",
           "end": "08:30"
-        },
-        {
-          "date": "2026-09-10",
-          "type": "public_skate",
-          "start": "13:00",
-          "end": "14:30"
         },
         {
           "date": "2026-09-10",
@@ -1578,6 +1554,12 @@
           "end": "08:15"
         },
         {
+          "date": "2026-10-08",
+          "type": "stick_and_puck",
+          "start": "14:30",
+          "end": "15:30"
+        },
+        {
           "date": "2026-10-09",
           "type": "public_skate",
           "start": "17:30",
@@ -1636,30 +1618,6 @@
       "lat": 40.234791,
       "lng": -111.638177,
       "sessions": [
-        {
-          "date": "2026-09-08",
-          "type": "stick_and_puck",
-          "start": "06:30",
-          "end": "08:30"
-        },
-        {
-          "date": "2026-09-08",
-          "type": "public_skate",
-          "start": "11:00",
-          "end": "12:00"
-        },
-        {
-          "date": "2026-09-08",
-          "type": "stick_and_puck",
-          "start": "13:30",
-          "end": "14:30"
-        },
-        {
-          "date": "2026-09-08",
-          "type": "public_skate",
-          "start": "19:00",
-          "end": "21:00"
-        },
         {
           "date": "2026-09-09",
           "type": "stick_and_puck",
