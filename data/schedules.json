@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-10T18:01:36.626037+00:00",
+  "last_updated": "2026-09-11T05:21:50.630542+00:00",
   "rinks": [
     {
       "id": "acord",
@@ -1098,18 +1098,6 @@
       "lng": -111.888,
       "sessions": [
         {
-          "date": "2026-09-10",
-          "type": "stick_and_puck",
-          "start": "14:15",
-          "end": "15:15"
-        },
-        {
-          "date": "2026-09-10",
-          "type": "stick_and_puck",
-          "start": "16:15",
-          "end": "17:30"
-        },
-        {
           "date": "2026-09-17",
           "type": "stick_and_puck",
           "start": "16:30",
@@ -1480,30 +1468,6 @@
       "lat": 40.234791,
       "lng": -111.638177,
       "sessions": [
-        {
-          "date": "2026-09-10",
-          "type": "stick_and_puck",
-          "start": "06:30",
-          "end": "08:30"
-        },
-        {
-          "date": "2026-09-10",
-          "type": "public_skate",
-          "start": "13:00",
-          "end": "14:00"
-        },
-        {
-          "date": "2026-09-10",
-          "type": "stick_and_puck",
-          "start": "13:30",
-          "end": "14:30"
-        },
-        {
-          "date": "2026-09-10",
-          "type": "public_skate",
-          "start": "19:00",
-          "end": "21:00"
-        },
         {
           "date": "2026-09-11",
           "type": "stick_and_puck",
@@ -2778,6 +2742,30 @@
         },
         {
           "date": "2026-11-09",
+          "type": "public_skate",
+          "start": "19:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-11-10",
+          "type": "stick_and_puck",
+          "start": "06:30",
+          "end": "08:30"
+        },
+        {
+          "date": "2026-11-10",
+          "type": "public_skate",
+          "start": "11:00",
+          "end": "12:00"
+        },
+        {
+          "date": "2026-11-10",
+          "type": "stick_and_puck",
+          "start": "13:30",
+          "end": "14:30"
+        },
+        {
+          "date": "2026-11-10",
           "type": "public_skate",
           "start": "19:00",
           "end": "21:00"
