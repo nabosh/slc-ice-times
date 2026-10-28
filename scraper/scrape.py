@@ -4,7 +4,7 @@ SLC Ice Times Scraper
 
 Scrapes ice rink schedules from:
 - Acord Ice Center (QuickScores PDF)
-- County Ice Center (QuickScores PDF)
+- County Ice Center (Salt Lake County Amilia proxy API)
 - SLC Sports Complex (Salt Lake County Amilia proxy API)
 - Cottonwood Heights Rec Center (HTML + PDF)
 - Utah Mammoth Ice Center (BondSports API)
@@ -46,16 +46,17 @@ RINKS = [
         "name": "Acord Ice Center",
         "phone": "385-468-1965",
         "address": "5353 West 3100 South, West Valley City, UT 84120",
-        "website": "https://slco.org/acord-ice",
+        "website": "https://www.saltlakecounty.gov/parks-recreation/facilities-and-golf/ice-centers/acord-ice-center/",
         "lat": 40.7006,
         "lng": -111.9774,
+        "notice": "Temporarily closed for repairs",
     },
     {
         "id": "county",
         "name": "County Ice Center",
         "phone": "385-468-1655",
         "address": "5201 South Murray Park Lane, Murray, UT 84107",
-        "website": "https://slco.org/county-ice-center",
+        "website": "https://www.saltlakecounty.gov/parks-recreation/facilities-and-golf/ice-centers/county-ice-center/",
         "lat": 40.6436,
         "lng": -111.8878,
     },
@@ -103,17 +104,13 @@ PDF_SOURCES = {
         f"{QUICKSCORES_BASE}/Orgs/ExtraMsg.php?OrgDir=slchockey&ExtraMsgID=15150",  # SPDI
         f"{QUICKSCORES_BASE}/Orgs/ExtraMsg.php?OrgDir=slchockey&ExtraMsgID=15154",  # Public
     ],
-    "county": [
-        f"{QUICKSCORES_BASE}/Orgs/ExtraMsg.php?OrgDir=slchockey&ExtraMsgID=15151",  # SPDI
-        f"{QUICKSCORES_BASE}/Orgs/ExtraMsg.php?OrgDir=slchockey&ExtraMsgID=15155",  # Public
-    ],
 }
 
-# Salt Lake County Amilia proxy API config for SLC Sports Complex
+# Salt Lake County Amilia proxy API config, keyed by rink_id (IDs from each rink page's fetchSchedules call)
 SLCO_AMILIA_API = "https://www.saltlakecounty.gov/api/proxy/AmiliaConnection/GetSchedulesByCenter"
-SLCO_SPORTS_COMPLEX = {
-    "id": "slc-sports-complex",
-    "loc_id": "2451775,2451994",
+SLCO_AMILIA_RINKS = {
+    "sports_complex": {"id": "slc-sports-complex", "loc_id": "2451775,2451994"},
+    "county": {"id": "county-ice-center-slc", "loc_id": "2464636"},
 }
 
 COTTONWOOD_PAGES = {
@@ -929,14 +926,14 @@ def scrape_cottonwood() -> list[dict]:
     return sessions
 
 
-def _fetch_sports_complex_page(select_date: str = "") -> list[dict]:
-    """Fetch one page of Sports Complex events from the SLCo Amilia proxy API."""
+def _fetch_slco_amilia_page(center: dict, select_date: str = "") -> list[dict]:
+    """Fetch one page of events from the SLCo Amilia proxy API."""
     resp = requests.post(
         SLCO_AMILIA_API,
         headers={**HEADERS, "Content-Type": "application/json; charset=utf-8"},
         json={
-            "ID": SLCO_SPORTS_COMPLEX["id"],
-            "LocId": SLCO_SPORTS_COMPLEX["loc_id"],
+            "ID": center["id"],
+            "LocId": center["loc_id"],
             "SelectDate": select_date,
             "Filter": "",
         },
@@ -950,13 +947,14 @@ def _fetch_sports_complex_page(select_date: str = "") -> list[dict]:
 _MAX_SESSION_HOURS = 4
 
 
-def scrape_sports_complex() -> list[dict]:
-    """Scrape SLC Sports Complex via Salt Lake County Amilia proxy API.
+def scrape_slco_amilia(rink_id: str) -> list[dict]:
+    """Scrape a Salt Lake County rink via the SLCo Amilia proxy API.
 
     The API returns 1-2 days of data per call (more for the initial empty
     date call). We page forward by advancing past the last returned date
     until we hit the horizon or get consecutive empty responses.
     """
+    center = SLCO_AMILIA_RINKS[rink_id]
     mt = ZoneInfo("America/Denver")
     today = date.today()
     horizon = today + timedelta(days=60)
@@ -967,7 +965,7 @@ def scrape_sports_complex() -> list[dict]:
     select_date = ""
     for _ in range(60):  # safety limit
         try:
-            events = _fetch_sports_complex_page(select_date)
+            events = _fetch_slco_amilia_page(center, select_date)
         except Exception as e:
             log(f"  Warning: Failed to fetch (date={select_date!r}): {e}")
             break
@@ -1226,8 +1224,8 @@ def scrape_rink(rink_config: dict) -> dict:
         sessions = scrape_cottonwood()
     elif rink_id == "mammoth":
         sessions = scrape_mammoth()
-    elif rink_id == "sports_complex":
-        sessions = scrape_sports_complex()
+    elif rink_id in SLCO_AMILIA_RINKS:
+        sessions = scrape_slco_amilia(rink_id)
     elif rink_id in DAYSMART_RINKS:
         sessions = scrape_daysmart(rink_id)
     else:
@@ -1254,6 +1252,7 @@ def scrape_rink(rink_config: dict) -> dict:
         "website": rink_config.get("website", ""),
         "lat": rink_config.get("lat"),
         "lng": rink_config.get("lng"),
+        "notice": rink_config.get("notice"),
         "sessions": unique,
     }
 

@@ -342,6 +342,22 @@
     border-color: var(--accent-sp-border);
   }
 
+  /* ---- Rink Notices ---- */
+  .rink-notice {
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    background: var(--accent-di-bg);
+    border: 1px solid var(--accent-di-border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .rink-notice strong {
+    color: var(--accent-di);
+    font-weight: 600;
+  }
+
   /* ---- Empty State ---- */
   .empty-state {
     text-align: center;
@@ -564,6 +580,11 @@
     // Sort by date, then start time
     sessions.sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
 
+    const noticesHtml = scheduleData.rinks
+      .filter(r => r.notice && (activeRinks.size === 0 || activeRinks.has(r.id)))
+      .map(r => `<div class="rink-notice"><strong>${r.name}</strong> ${r.notice}</div>`)
+      .join('');
+
     if (sessions.length === 0) {
       // Build links for selected rinks (or all rinks if none selected)
       const selectedRinks = scheduleData.rinks.filter(r =>
@@ -577,7 +598,7 @@
                 <a href="${mapsUrl}" target="_blank" rel="noopener">${mapIcon} Directions</a>`;
       }).join('');
 
-      main.innerHTML = `
+      main.innerHTML = noticesHtml + `
         <div class="empty-state">
           <div class="icon">🏒</div>
           <p>No sessions found for the selected filters.</p>
@@ -640,7 +661,7 @@
       html += `</div></div>`;
     }
 
-    main.innerHTML = html;
+    main.innerHTML = noticesHtml + html;
   }
 
   // Init filters
